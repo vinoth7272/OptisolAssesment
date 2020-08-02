@@ -1,6 +1,7 @@
 package com.example.optisolassesment
 
 import android.app.Application
+import com.example.optisolassesment.di.mapRetrofitModule
 import com.example.optisolassesment.di.retrofitModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -13,7 +14,7 @@ class MyApp : Application() {
         startKoin {
             androidContext(this@MyApp)
             androidLogger(Level.DEBUG)
-            modules(arrayListOf(retrofitModule))
+            modules(arrayListOf(retrofitModule,mapRetrofitModule))
         }
 
     }

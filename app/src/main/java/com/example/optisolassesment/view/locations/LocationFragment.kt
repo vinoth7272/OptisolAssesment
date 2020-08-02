@@ -14,6 +14,7 @@ import com.example.optisolassesment.R
 import com.example.optisolassesment.model.LocationFeature
 import com.example.optisolassesment.network.ApiHelperImpl
 import com.example.optisolassesment.network.ApiService
+import com.example.optisolassesment.network.MapApiService
 import com.example.optisolassesment.network.Status
 import com.example.optisolassesment.utils.isNetworkConnected
 import com.example.optisolassesment.utils.showShortSnack
@@ -26,8 +27,9 @@ import org.koin.android.ext.android.inject
 class LocationFragment : Fragment() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private val apiService: ApiService by inject()
+    private val mapApiService: MapApiService by inject()
     private val sharedViewModel: SharedViewModel by activityViewModels {
-        ViewModelFactory(DataRepository(ApiHelperImpl(apiService)))
+        ViewModelFactory(DataRepository(ApiHelperImpl(apiService), mapApiService))
     }
     private lateinit var locationListAdapter: LocationListAdapter
 
@@ -66,7 +68,7 @@ class LocationFragment : Fragment() {
             if (it.isNetworkConnected()) {
                 sharedViewModel.fetchLocationsData()
             } else {
-                parent.showShortSnack(it.getString(R.string.network_error))
+                rootView.showShortSnack(it.getString(R.string.network_error))
             }
         }
     }
@@ -83,7 +85,7 @@ class LocationFragment : Fragment() {
     }
 
     private fun loadError() {
-        parent.showShortSnack("No Data Found")
+        rootView.showShortSnack("No Data Found")
         recycler_view.visibility = View.GONE
         progressBar.visibility = View.GONE
     }

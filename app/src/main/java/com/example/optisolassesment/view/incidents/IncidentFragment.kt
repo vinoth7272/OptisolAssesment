@@ -14,6 +14,7 @@ import com.example.optisolassesment.R
 import com.example.optisolassesment.model.Incidents
 import com.example.optisolassesment.network.ApiHelperImpl
 import com.example.optisolassesment.network.ApiService
+import com.example.optisolassesment.network.MapApiService
 import com.example.optisolassesment.network.Status
 import com.example.optisolassesment.utils.DataUtil.incidentArrayList
 import com.example.optisolassesment.utils.PaginationScrollListener
@@ -29,8 +30,9 @@ class IncidentFragment : Fragment() {
 
     private lateinit var linearLayoutManager: LinearLayoutManager
     private val apiService: ApiService by inject()
+    private val mapApiService: MapApiService by inject()
     private val sharedViewModel: SharedViewModel by activityViewModels {
-        ViewModelFactory(DataRepository(ApiHelperImpl(apiService)))
+        ViewModelFactory(DataRepository(ApiHelperImpl(apiService),mapApiService))
     }
     private lateinit var incidentListAdapter: IncidentListAdapter
 
@@ -64,7 +66,7 @@ class IncidentFragment : Fragment() {
                 sharedViewModel.fetchIncidentData()
             } else {
                 progressBar.visibility = View.GONE
-                parent.showShortSnack(it.getString(R.string.network_error))
+                rootView.showShortSnack(it.getString(R.string.network_error))
             }
         }
     }
@@ -101,7 +103,7 @@ class IncidentFragment : Fragment() {
     }
 
     private fun loadError() {
-        parent.showShortSnack("No Data Found")
+        rootView.showShortSnack("No Data Found")
         recycler_view.visibility = View.GONE
         progressBar.visibility = View.GONE
     }

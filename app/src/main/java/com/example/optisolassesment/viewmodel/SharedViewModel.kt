@@ -1,11 +1,10 @@
 package com.example.optisolassesment.viewmodel
 
-import android.location.Location
-import android.location.LocationManager
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.optisolassesment.model.DistanceResponse
 import com.example.optisolassesment.model.IncidentBaseResponse
 import com.example.optisolassesment.model.LocationBaseResponse
 import com.example.optisolassesment.network.Resource
@@ -20,6 +19,7 @@ class SharedViewModel(private val dataRepository: DataRepository) : ViewModel() 
 
     val incidentResponseLiveData = MutableLiveData<Resource<IncidentBaseResponse>>()
     val locationResponseLiveData = MutableLiveData<Resource<LocationBaseResponse>>()
+    val distanceResponseLiveData = MutableLiveData<Resource<DistanceResponse>>()
     var isFirstPage = true
 
     fun fetchIncidentData() {
@@ -46,6 +46,23 @@ class SharedViewModel(private val dataRepository: DataRepository) : ViewModel() 
             }
         } catch (e: Exception) {
             locationResponseLiveData.postValue(Resource.error(e.localizedMessage, null))
+        }
+    }
+
+    fun fetchDistanceApi(
+        currentLatLong: LatLng,
+        theftLoc: LatLng
+    ) {
+        distanceResponseLiveData.postValue(Resource.loading(null))
+        try {
+            viewModelScope.launch {
+                val locationDataResource =
+                    dataRepository.fetchLocationDistance("${currentLatLong.latitude},${currentLatLong.longitude}",
+                        "${theftLoc.latitude},${theftLoc.longitude}")
+                distanceResponseLiveData.postValue(locationDataResource)
+            }
+        } catch (e: Exception) {
+            distanceResponseLiveData.postValue(Resource.error(e.localizedMessage, null))
         }
     }
 
