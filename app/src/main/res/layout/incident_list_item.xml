@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="incidents"
+            type="com.example.optisolassesment.model.Incidents" />
+    </data>
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_small">
+
+            <TextView
+                android:id="@+id/txt_title"
+                style="@style/title_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:setText="@{incidents.title}" />
+
+            <LinearLayout
+                android:id="@+id/descLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_title"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="@dimen/margin_small"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
+
+                <TextView
+                    android:id="@+id/txt_desc"
+                    style="@style/desc_text_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    app:setText="@{incidents.description}" />
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/image_size"
+                    android:layout_weight="1"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_baseline_image_24"
+                    app:setImageUrl="@{incidents.media.image_url_thumb}" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_address"
+                style="@style/desc_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/descLayout"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_toStartOf="@+id/txt_updated_at"
+                app:setText="@{incidents.address}" />
+
+            <TextView
+                android:id="@+id/txt_updated_at"
+                style="@style/time_txt_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/txt_address"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/margin_small"
+                app:setDateText="@{incidents.occurred_at}" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>
